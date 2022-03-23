@@ -13,7 +13,7 @@ try:
 
   trips_path = 'https://ebird.org/tripreport-internal/v1/checklists/'
   checklist_path = 'https://api.ebird.org/v2/product/checklist/view/'
-  tax_path = "https://api.ebird.org/v2/ref/taxonomy/ebird?species=%s&version=2021&fmt=json"
+
 
   with open('./breeding_code.json', encoding="utf-8") as f:
     breeding_codes = json.load(f)
@@ -31,7 +31,7 @@ try:
 
 except Exception as e:
   print(e)
-  input("press any key to exit: ")
+  input("input any key to exit: ")
 
 def merge_data(trip_id, trips_path, checklist_path):
 
@@ -77,11 +77,7 @@ def merge_data(trip_id, trips_path, checklist_path):
     ob_keys = tuple(ob.keys())
 
     for s in ob["obs"]:
-      # sp = requests.request("GET", tax_path % s["speciesCode"], headers=headers, data=payload)
-      # sp = sp.json()[0]
       sp = sp_info[s["speciesCode"]]
-
-
 
       s_id = ob["subId"]
       c_name = sp["c_name"]
@@ -172,4 +168,4 @@ try:
 
 except Exception as e:
   print(e)
-  input("press any key to end")
+  input("input any key to exit: ")
