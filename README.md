@@ -1,1 +1,1 @@
-put breeding_code.json and sp_info.json in same diration  with trip_summary.exe before execute it.
+put breeding_code.json and sp_info.json in same direction  with trip_summary.exe before execute it.

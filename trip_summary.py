@@ -158,7 +158,6 @@ def merge_data(trip_id, trips_path, checklist_path):
   trip_data = pd.DataFrame(trip_data)
   print(trip_data)
 
-
   time_now = datetime.strftime(datetime.now(), '%Y-%m-%d_%H:%M')
   trip_data.to_csv("./trip_summary_%s.csv" % time_now, index = False)
 
