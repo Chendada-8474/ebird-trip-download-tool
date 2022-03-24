@@ -5,15 +5,20 @@ from tqdm import tqdm
 from datetime import datetime
 
 try:
-
-  TRIP_ID = input("your trip summary ID: ")
+  TRIP_ID = input("your trip report ID: ")
   EBIRD_TOKEN = input("your eBird token: ")
 
-  print("start downloading...")
+  s = requests.Session()
+  cookies = dict(I18N_LANGUAGE='zh')
 
   trips_path = 'https://ebird.org/tripreport-internal/v1/checklists/'
   checklist_path = 'https://api.ebird.org/v2/product/checklist/view/'
 
+  payload={}
+  headers = {'X-eBirdApiToken': EBIRD_TOKEN}
+
+  checklists = requests.request("GET", trips_path + TRIP_ID, headers=headers, data=payload)
+  checklists = checklists.json()
 
   with open('./breeding_code.json', encoding="utf-8") as f:
     breeding_codes = json.load(f)
@@ -21,44 +26,7 @@ try:
   with open('./sp_info.json', encoding="utf-8") as f:
     sp_info = json.load(f)
 
-  s = requests.Session()
-  cookies = dict(I18N_LANGUAGE='zh')
 
-  payload={}
-  headers = {
-    'X-eBirdApiToken': EBIRD_TOKEN
-  }
-
-except Exception as e:
-  print(e)
-  input("input any key to exit: ")
-
-def merge_data(TRIP_ID, trips_path, checklist_path):
-
-  trip_data = {
-      "Submission ID": [],
-      "Common Name": [],
-      "Scientific Name": [],
-      "Taxonomic Order": [],
-      "Count": [],
-      "State/Province": [],
-      "County": [],
-      "Location ID": [],
-      "Location": [],
-      "Latitude": [],
-      "Longitude": [],
-      "Date": [],
-      "Time": [],
-      "Protocol": [],
-      "Duration (Min)": [],
-      "All Obs Reported": [],
-      "Distance Traveled (km)": [],
-      "Area Covered (ha)": [],
-      "Number of Observers": [],
-      "Breeding Code": [],
-      "Observation Details": [],
-      "Checklist Comments": [],
-  }
 
   pro_code = {
     "P20": "eBird - Casual Observation",
@@ -67,8 +35,36 @@ def merge_data(TRIP_ID, trips_path, checklist_path):
     "P23": "eBird - Exhaustive Area Count",
   }
 
-  checklists = requests.request("GET", trips_path + TRIP_ID, headers=headers, data=payload)
-  checklists = checklists.json()
+except Exception as e:
+  print(e)
+  input("input any key to exit: ")
+
+def trip_download():
+  print("start downloading...")
+  trip_data = {
+    "Submission ID": [],
+    "Common Name": [],
+    "Scientific Name": [],
+    "Taxonomic Order": [],
+    "Count": [],
+    "State/Province": [],
+    "County": [],
+    "Location ID": [],
+    "Location": [],
+    "Latitude": [],
+    "Longitude": [],
+    "Date": [],
+    "Time": [],
+    "Protocol": [],
+    "Duration (Min)": [],
+    "All Obs Reported": [],
+    "Distance Traveled (km)": [],
+    "Area Covered (ha)": [],
+    "Number of Observers": [],
+    "Breeding Code": [],
+    "Observation Details": [],
+    "Checklist Comments": [],
+    }
 
   for c in tqdm(checklists):
     ob = requests.request("GET", checklist_path + c["subId"], headers=headers, data=payload)
@@ -164,7 +160,7 @@ def merge_data(TRIP_ID, trips_path, checklist_path):
 
 
 try:
-  merge_data(TRIP_ID, trips_path, checklist_path)
+  trip_download()
 
 except Exception as e:
   print(e)
