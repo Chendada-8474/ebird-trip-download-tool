@@ -26,8 +26,6 @@ try:
   with open('./sp_info.json', encoding="utf-8") as f:
     sp_info = json.load(f)
 
-
-
   pro_code = {
     "P20": "eBird - Casual Observation",
     "P21": "eBird - Stationary Count",
