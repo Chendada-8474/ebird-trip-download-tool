@@ -6,7 +6,7 @@ from datetime import datetime
 
 try:
 
-  trip_id = input("your trip summary ID: ")
+  TRIP_ID = input("your trip summary ID: ")
   EBIRD_TOKEN = input("your eBird token: ")
 
   print("start downloading...")
@@ -33,7 +33,7 @@ except Exception as e:
   print(e)
   input("input any key to exit: ")
 
-def merge_data(trip_id, trips_path, checklist_path):
+def merge_data(TRIP_ID, trips_path, checklist_path):
 
   trip_data = {
       "Submission ID": [],
@@ -67,7 +67,7 @@ def merge_data(trip_id, trips_path, checklist_path):
     "P23": "eBird - Exhaustive Area Count",
   }
 
-  checklists = requests.request("GET", trips_path + trip_id, headers=headers, data=payload)
+  checklists = requests.request("GET", trips_path + TRIP_ID, headers=headers, data=payload)
   checklists = checklists.json()
 
   for c in tqdm(checklists):
@@ -157,14 +157,14 @@ def merge_data(trip_id, trips_path, checklist_path):
 
   trip_data = pd.DataFrame(trip_data)
   time_now = datetime.strftime(datetime.now(), '%Y-%m-%d_%H%M')
-  trip_data.to_csv("./trip_summary_%s.csv" % time_now, index = False)
+  trip_data.to_csv("./trip_report_%s_%s.csv" % (TRIP_ID, time_now), index = False)
 
   print("Download successed!")
   input("input any key to exit: ")
 
 
 try:
-  merge_data(trip_id, trips_path, checklist_path)
+  merge_data(TRIP_ID, trips_path, checklist_path)
 
 except Exception as e:
   print(e)
