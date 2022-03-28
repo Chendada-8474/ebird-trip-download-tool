@@ -3,10 +3,17 @@ import json
 import pandas as pd
 from tqdm import tqdm
 from datetime import datetime
+from easygui import multenterbox
 
 try:
-  TRIP_ID = input("your trip report ID: ")
-  EBIRD_TOKEN = input("your eBird token: ")
+  msg = "Enter your trip report ID and eBird token"
+  title = "eBird Trip download tool"
+  field_names = ["trip ID", "eBird token"]
+  print("Please input trip ID and eBird token in popup enter box")
+  field_values = multenterbox(msg,title, field_names)
+
+  TRIP_ID = field_values[0]
+  EBIRD_TOKEN = field_values[1]
 
   s = requests.Session()
   cookies = dict(I18N_LANGUAGE='zh')
@@ -34,7 +41,7 @@ try:
   }
 
 except Exception as e:
-  print(e)
+  print("Error detected: " + e)
   input("input any key to exit: ")
 
 def trip_download():
@@ -161,5 +168,5 @@ try:
   trip_download()
 
 except Exception as e:
-  print(e)
+  print("Error detected: " + e)
   input("input any key to exit: ")
