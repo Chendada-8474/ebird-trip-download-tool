@@ -12,6 +12,11 @@ try:
   print("Please input trip ID and eBird token in popup enter box")
   field_values = multenterbox(msg,title, field_names)
 
+  if len(field_values) != 2:
+    print("You didn't enter any value, Bye Bye.")
+    input("input any key to exit: ")
+    exit()
+
   TRIP_ID = field_values[0]
   EBIRD_TOKEN = field_values[1]
 
@@ -41,8 +46,9 @@ try:
   }
 
 except Exception as e:
-  print("Error detected: " + e)
+  print("Error detected: " + str(e))
   input("input any key to exit: ")
+  exit()
 
 def trip_download():
   print("start downloading...")
@@ -73,6 +79,20 @@ def trip_download():
 
   for c in tqdm(checklists):
     ob = requests.request("GET", checklist_path + c["subId"], headers=headers, data=payload)
+
+    if str(ob) == "<Response [403]>":
+      conue = input("\nYou don't have proper authorization to access the requested content on observation %s. Please check your eBird token or the visibility of checklist which you are trying to download.\nDo you want skip this observation and continues or exit? (y/n): " % c["subId"])
+
+      while True:
+        if conue.lower() == "y":
+          break
+        elif conue.lower() == "n":
+          exit()
+        else:
+          conue = input("Please enter y or n: ")
+
+      continue
+
     ob = ob.json()
 
     ob_keys = tuple(ob.keys())
@@ -168,5 +188,5 @@ try:
   trip_download()
 
 except Exception as e:
-  print("Error detected: " + e)
+  print("Error detected: " + str(e))
   input("input any key to exit: ")
