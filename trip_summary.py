@@ -81,7 +81,7 @@ def trip_download():
     ob = requests.request("GET", checklist_path + c["subId"], headers=headers, data=payload)
 
     if str(ob) == "<Response [403]>":
-      conue = input("\nYou don't have proper authorization to access the requested content on observation %s. Please check your eBird token.\nEnter any key to exit() " % c["subId"])
+      input("\nYou don't have proper authorization to access the requested content on observation %s. Please check your eBird token.\nEnter any key to exit() " % c["subId"])
       exit()
 
     ob = ob.json()
