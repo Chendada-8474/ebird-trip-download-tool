@@ -81,17 +81,8 @@ def trip_download():
     ob = requests.request("GET", checklist_path + c["subId"], headers=headers, data=payload)
 
     if str(ob) == "<Response [403]>":
-      conue = input("\nYou don't have proper authorization to access the requested content on observation %s. Please check your eBird token or the visibility of checklist which you are trying to download.\nDo you want skip this observation and continues or exit? (y/n): " % c["subId"])
-
-      while True:
-        if conue.lower() == "y":
-          break
-        elif conue.lower() == "n":
-          exit()
-        else:
-          conue = input("Please enter y or n: ")
-
-      continue
+      conue = input("\nYou don't have proper authorization to access the requested content on observation %s. Please check your eBird token.\nEnter any key to exit() " % c["subId"])
+      exit()
 
     ob = ob.json()
 
